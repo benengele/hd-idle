@@ -37,7 +37,7 @@ func StopScsiDevice(device string) error {
 		startStopUnit, 
 		0, //Reserved (7 bit) + IMMED
 		0, //Reserved (8 bit)
-		0, //Reserved (4 bit) + POWER CONDITION MODIFER
+		0x1, //Reserved (4 bit) + POWER CONDITION MODIFER
 		standby, //POWER CONDITION + Reserved (1 bit) + NO_ FLUSH + LOEJ + LOEJ 
 		0} //CONTROL
 	ioHdr := &sgio.SgIoHdr{
@@ -48,7 +48,6 @@ func StopScsiDevice(device string) error {
 		Sbp:            &senseBuf[0],
 		MxSbLen:        sgio.SENSE_BUF_LEN,
 	}
-
 	if err := sgio.SgioSyscall(f, ioHdr); err != nil {
 		return err
 	}
